@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
 
     // hande Search
     private void handleSearch() {
-        if(etSearch.getText().toString().isEmpty()) {
+        if (etSearch.getText().toString().isEmpty()) {
             createAdapter(itemAdapter, DB.getItems());
             return;
         }
@@ -116,6 +116,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void handleAddButton() {
+        if (!validateForm()) {
+            return;
+        }
         String title = etTitle.getText().toString();
         String content = etContent.getText().toString();
         int price = Integer.parseInt(etPrice.getText().toString());
@@ -156,6 +159,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean validateForm() {
+        if (etTitle.getText().toString().isEmpty()) {
+            etTitle.setError("Title is required");
+            return false;
+        }
+        if (etContent.getText().toString().isEmpty()) {
+            etContent.setError("Content is required");
+            return false;
+        }
+        if (etPrice.getText().toString().isEmpty()) {
+            etPrice.setError("Price is required");
+
+
+            return false;
+        }
+
         return true;
     }
 
