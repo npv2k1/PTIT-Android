@@ -18,13 +18,13 @@ public class DB {
         items.remove(item);
     }
 
-    public static void updateItem(Item item) {
-        for (int i = 0; i < items.size(); i++) {
-            if (items.get(i).getTitle().equals(item.getTitle())) {
-                items.set(i, item);
-            }
-        }
-    }
+//    public static void updateItem(Item item) {
+//        for (int i = 0; i < items.size(); i++) {
+//            if (items.get(i).getTitle().equals(item.getTitle())) {
+//                items.set(i, item);
+//            }
+//        }
+//    }
 
     public static List<Item> getItems() {
         return items;
@@ -54,5 +54,17 @@ public class DB {
         }
         return result;
     }
+
+    public static boolean updateItem(Item item) {
+        // find item by id and update
+        for (int i = 0; i < items.size(); i++) {
+            if (items.get(i).getId() == item.getId()) {
+                items.set(i, item);
+                return true;
+            }
+        }
+        return false;
+    }
+
 
 }

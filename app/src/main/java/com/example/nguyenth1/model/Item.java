@@ -1,6 +1,15 @@
 package com.example.nguyenth1.model;
 
 public class Item {
+    public static int getId() {
+        return id;
+    }
+
+    public static void setId(int id) {
+        Item.id = id;
+    }
+
+    private static int id = 0;
     private String title;
     private String content;
     private int price;
@@ -17,6 +26,7 @@ public class Item {
         this.title = title;
         this.content = content;
         this.image = image;
+        this.id++;
     }
 
     public Item(String title, String content) {

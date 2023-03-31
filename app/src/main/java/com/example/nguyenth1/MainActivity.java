@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
 
     // handle event
 
+    private Item currentSelectItem = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
         if (!validateForm()) {
             return;
         }
+
         String title = etTitle.getText().toString();
         String content = etContent.getText().toString();
         int price = Integer.parseInt(etPrice.getText().toString());
@@ -127,7 +130,15 @@ public class MainActivity extends AppCompatActivity {
         int image = listItemImage.get(sImage.getSelectedItemPosition()).getImage();
         Item item = new Item(title, content, image);
         item.setPrice(price);
-        DB.addItem(item);
+        if(currentSelectItem != null) {
+            item.setId(currentSelectItem.getId());
+            boolean updateStatus =  DB.updateItem(item);
+            currentSelectItem = null;
+        } else {
+            DB.addItem(item);
+        }
+//        DB.addItem(item);
+
         itemAdapter.setItemListener(new ItemAdapter.ItemListener() {
             @Override
             public void onClickItem(View view, int position) {
@@ -136,10 +147,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         createAdapter(itemAdapter, DB.getItems());
+        updateButtonText();
+
     }
 
     private void handleEvent() {
         btnAdd.setOnClickListener(view -> handleAddButton());
+    }
+
+    private void updateButtonText() {
+        if (currentSelectItem == null) {
+            btnAdd.setText("Add");
+        } else {
+            btnAdd.setText("Update");
+        }
     }
 
 
@@ -156,6 +177,9 @@ public class MainActivity extends AppCompatActivity {
                 sImage.setSelection(i);
             }
         }
+        currentSelectItem = item;
+        updateButtonText();
+
     }
 
     private boolean validateForm() {
