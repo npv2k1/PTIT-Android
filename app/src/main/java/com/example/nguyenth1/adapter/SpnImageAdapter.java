@@ -1,4 +1,4 @@
-package com.example.nguyenth1.adapters;
+package com.example.nguyenth1.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,16 +8,15 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.example.nguyenth1.R;
-import com.example.nguyenth1.model.ItemImage;
+import com.example.nguyenth1.model.SpnItem;
 
 import java.util.ArrayList;
-import java.util.zip.Inflater;
 
-public class SpinerImageAdapter extends BaseAdapter {
+public class SpnImageAdapter extends BaseAdapter {
     private Context context;
-    private ArrayList<ItemImage> lists;
+    private ArrayList<SpnItem> lists;
 
-    public SpinerImageAdapter(Context context, ArrayList<ItemImage> lists) {
+    public SpnImageAdapter(Context context, ArrayList<SpnItem> lists) {
         this.context = context;
         this.lists = lists;
     }
@@ -30,11 +29,11 @@ public class SpinerImageAdapter extends BaseAdapter {
         this.context = context;
     }
 
-    public ArrayList<ItemImage> getLists() {
+    public ArrayList<SpnItem> getLists() {
         return lists;
     }
 
-    public void setLists(ArrayList<ItemImage> lists) {
+    public void setLists(ArrayList<SpnItem> lists) {
         this.lists = lists;
     }
 

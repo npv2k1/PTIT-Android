@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * It's a static class that contains a static list of items, and it provides static methods to
+ * manipulate the list
+ */
 public class DB {
     private static List<Item> items = new ArrayList<>();
 
@@ -18,13 +22,6 @@ public class DB {
         items.remove(item);
     }
 
-//    public static void updateItem(Item item) {
-//        for (int i = 0; i < items.size(); i++) {
-//            if (items.get(i).getTitle().equals(item.getTitle())) {
-//                items.set(i, item);
-//            }
-//        }
-//    }
 
     public static List<Item> getItems() {
         return items;

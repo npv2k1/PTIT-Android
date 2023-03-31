@@ -1,14 +1,7 @@
 package com.example.nguyenth1.model;
 
 public class Item {
-    public static int getId() {
-        return id;
-    }
-
-    public static void setId(int id) {
-        Item.id = id;
-    }
-
+    // TODO: Kiểm tra các biến và thuộc tính của Item
     private static int id = 0;
     private String title;
     private String content;
@@ -18,10 +11,7 @@ public class Item {
     public Item() {
     }
 
-    public Item(String title) {
-        this.title = title;
-    }
-
+    // TODO: Tạo hàm khởi tạo và tăng static id
     public Item(String title, String content, int image) {
         this.title = title;
         this.content = content;
@@ -29,11 +19,8 @@ public class Item {
         this.id++;
     }
 
-    public Item(String title, String content) {
-        this.title = title;
-        this.content = content;
-    }
 
+    // TODO: Tạo các hàm getter và setter
     public String getTitle() {
         return title;
     }
@@ -64,5 +51,23 @@ public class Item {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public static int getId() {
+        return id;
+    }
+
+    public static void setId(int id) {
+        Item.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", price=" + price +
+                ", image=" + image +
+                '}';
     }
 }

@@ -57,7 +57,6 @@
             app:layout_constraintTop_toBottomOf="@+id/etContent" />
 
 
-
         <Button
             android:id="@+id/btnAdd"
             android:layout_width="wrap_content"
@@ -68,15 +67,16 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
+
         <Spinner
-            android:layout_marginTop="3dp"
             android:id="@+id/sImage"
             android:layout_width="409dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:background="@drawable/custom_image_button"
             android:minHeight="48dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/etPrice"
-            android:background="@drawable/custom_image_button"
 
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -88,10 +88,9 @@
         android:layout_marginStart="1dp"
         android:layout_marginTop="1dp"
         android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
         android:padding="3dp"
-        >
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
 
         <EditText
             android:id="@+id/etSearch"
@@ -115,8 +114,7 @@
 
     </LinearLayout>
 
-
-        <androidx.recyclerview.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvItem"
         android:layout_width="match_parent"
         android:layout_height="0dp"

@@ -8,34 +8,35 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.Toast;
 
-import com.example.nguyenth1.adapters.SpinerImageAdapter;
+import com.example.nguyenth1.adapter.SpnImageAdapter;
 import com.example.nguyenth1.db.DB;
 import com.example.nguyenth1.model.Item;
-import com.example.nguyenth1.model.ItemAdapter;
-import com.example.nguyenth1.model.ItemImage;
+import com.example.nguyenth1.adapter.RVItemAdapter;
+import com.example.nguyenth1.model.SpnItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    // TODO: Khai báo các biến toàn cục
     // Search
     private EditText etSearch;
     private ImageButton btnSearch;
 
     private RecyclerView rvItem;
-    private ItemAdapter itemAdapter;
+    private RVItemAdapter itemAdapter;
     private EditText etTitle, etContent, etPrice;
     private Button btnAdd;
-    private Spinner sImage;
+    private Spinner spinnerImage;
 
-    private ArrayList<ItemImage> listItemImage = new ArrayList<>();
+    private ArrayList<SpnItem> listItemImage = new ArrayList<>();
 
     // handle event
 
@@ -46,20 +47,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        listItemImage.add(new ItemImage(R.drawable.ic_launcher_background));
-        listItemImage.add(new ItemImage(R.drawable.ic_baseline_phone_iphone_24));
-        listItemImage.add(new ItemImage(R.drawable.ic_baseline_tablet_android_24));
-
-
-        // hide action bar
+     // hide action bar
         getSupportActionBar().hide();
 
         // init view
         initView();
+        makeImageSpiner();
+        makeSearchBar();
         handleEvent();
     }
 
+    // TODO: map các biến với các view trong layout
     private void initView() {
         // mapping
         rvItem = findViewById(R.id.rvItem);
@@ -67,20 +65,30 @@ public class MainActivity extends AppCompatActivity {
         etTitle = findViewById(R.id.etTitle);
         etPrice = findViewById(R.id.etPrice);
         etContent = findViewById(R.id.etContent);
-        sImage = findViewById(R.id.sImage);
+        spinnerImage = findViewById(R.id.sImage);
 
-        sImage.setAdapter(new SpinerImageAdapter(this, listItemImage));
-
-
-        itemAdapter = new ItemAdapter(this);
-        itemAdapter.setHolderClickListener((view) -> {
-            Item item = (Item) view.getTag();
-            System.out.println("item: " + item);
-//            setEditForm(item);
+        itemAdapter = new RVItemAdapter(this);
+        itemAdapter.setItemListener(new RVItemAdapter.ItemListener() {
+            @Override
+            public void onClickItem(View view, int position) {
+                System.out.println("position: " + position);
+                setEditForm(DB.getItems().get(position));
+            }
         });
-
         createAdapter(itemAdapter, DB.getItems());
+    }
 
+    private void makeImageSpiner(){
+        // create list image for spiner
+        listItemImage.add(new SpnItem(R.drawable.ic_launcher_background));
+        listItemImage.add(new SpnItem(R.drawable.ic_baseline_phone_iphone_24));
+        listItemImage.add(new SpnItem(R.drawable.ic_baseline_tablet_android_24));
+        // set adapter for spiner
+        spinnerImage.setAdapter(new SpnImageAdapter(this, listItemImage));
+
+    }
+
+    private void makeSearchBar(){
         // search map view
         etSearch = findViewById(R.id.etSearch);
         btnSearch = findViewById(R.id.btnSearch);
@@ -102,7 +110,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
     // hande Search
@@ -119,15 +126,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void handleAddButton() {
         if (!validateForm()) {
+            Toast.makeText(this, "Form error", Toast.LENGTH_SHORT).show();
             return;
         }
-
         String title = etTitle.getText().toString();
         String content = etContent.getText().toString();
         int price = Integer.parseInt(etPrice.getText().toString());
         System.out.println("price: " + etPrice.getText().toString());
 
-        int image = listItemImage.get(sImage.getSelectedItemPosition()).getImage();
+        int image = listItemImage.get(spinnerImage.getSelectedItemPosition()).getImage();
         Item item = new Item(title, content, image);
         item.setPrice(price);
         if(currentSelectItem != null) {
@@ -137,18 +144,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             DB.addItem(item);
         }
-//        DB.addItem(item);
-
-        itemAdapter.setItemListener(new ItemAdapter.ItemListener() {
-            @Override
-            public void onClickItem(View view, int position) {
-                System.out.println("position: " + position);
-                setEditForm(DB.getItems().get(position));
-            }
-        });
         createAdapter(itemAdapter, DB.getItems());
         updateButtonText();
-
     }
 
     private void handleEvent() {
@@ -164,6 +161,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * It sets the edit form.
+     *
+     * @param item Item{id=1, title='title', content='content', price=100,
+     * image=R.drawable.ic_launcher_background}
+     */
     private void setEditForm(Item item) {
         System.out.println("item: " + item);
         etTitle.setText(item.getTitle());
@@ -174,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
         // find image int and set selecion
         for (int i = 0; i < listItemImage.size(); i++) {
             if (listItemImage.get(i).getImage() == item.getImage()) {
-                sImage.setSelection(i);
+                spinnerImage.setSelection(i);
             }
         }
         currentSelectItem = item;
@@ -193,8 +196,6 @@ public class MainActivity extends AppCompatActivity {
         }
         if (etPrice.getText().toString().isEmpty()) {
             etPrice.setError("Price is required");
-
-
             return false;
         }
 
@@ -202,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void createAdapter(ItemAdapter adapter, List<Item> items) {
+    private void createAdapter(RVItemAdapter adapter, List<Item> items) {
         adapter.setItems(items);
         rvItem.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         rvItem.setAdapter(adapter);

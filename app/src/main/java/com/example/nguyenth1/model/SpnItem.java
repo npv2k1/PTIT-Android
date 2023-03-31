@@ -1,14 +1,14 @@
 package com.example.nguyenth1.model;
 
-public class ItemImage {
+public class SpnItem {
     private static int id;
     private int image;
 
-    public ItemImage() {
+    public SpnItem() {
 
     }
 
-    public ItemImage(int image) {
+    public SpnItem(int image) {
         this.image = image;
         this.id++;
     }
@@ -18,7 +18,7 @@ public class ItemImage {
     }
 
     public static void setId(int id) {
-        ItemImage.id = id;
+        SpnItem.id = id;
     }
 
     public int getImage() {
