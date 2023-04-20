@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/mFood"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="Food" />
+    <item
+        android:id="@+id/mMovie"
+        android:icon="@drawable/ic_baseline_search_24"
+        android:title="Movie" />
+
+    <item
+        android:id="@+id/mTravel"
+        android:icon="@drawable/ic_baseline_contact_page_24"
+        android:title="Travel" />
+
+</menu>
