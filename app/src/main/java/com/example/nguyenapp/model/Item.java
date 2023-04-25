@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Item {
     // TODO: Kiểm tra các biến và thuộc tính của Item
-    private static int id = 0;
+    private int id = 0;
     private String title;
     private String content;
     private int price;
@@ -72,12 +72,12 @@ public class Item {
         this.price = price;
     }
 
-    public static int getId() {
+    public int getId() {
         return id;
     }
 
-    public static void setId(int id) {
-        Item.id = id;
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override

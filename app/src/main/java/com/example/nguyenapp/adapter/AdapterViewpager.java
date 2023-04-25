@@ -1,5 +1,7 @@
 package com.example.nguyenapp.adapter;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -11,10 +13,12 @@ import com.example.nguyenapp.fragments.FragmentB;
 import com.example.nguyenapp.fragments.FragmentC;
 
 public class AdapterViewpager extends FragmentPagerAdapter {
+    private Context context;
     private int numPage = 3;
-    public AdapterViewpager(@NonNull FragmentManager fm, int behavior) {
+    public AdapterViewpager(@NonNull FragmentManager fm, int behavior, Context context) {
         super(fm, behavior);
         numPage = behavior;
+        this.context = context;
     }
 
     @NonNull
@@ -22,7 +26,7 @@ public class AdapterViewpager extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new FragmentA();
+                return new FragmentA(context);
             case 1:
                 return new FragmentB();
             case 2:

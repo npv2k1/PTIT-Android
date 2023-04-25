@@ -59,7 +59,8 @@ public class ItemDB extends SQLiteOpenHelper {
     public int remove(Item item) {
         SQLiteDatabase db = getWritableDatabase();
 
-        int rowsAffected = db.delete("items", "id = ?", new String[]{String.valueOf(Item.getId())});
+        int rowsAffected = db.delete("items", "id = ?", new String[]{String.valueOf(item.getId())});
+
         db.close();
 
         return rowsAffected;
@@ -70,17 +71,13 @@ public class ItemDB extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put("title", item.getTitle());
         values.put("content", item.getContent());
+
         values.put("price", item.getPrice());
         values.put("image", item.getImage());
 
-        String selection = "title = ?";
-        String[] selectionArgs = { item.getTitle() };
+        db.update("items", values, "id = ?", new String[]{String.valueOf(item.getId())});
 
-        int count = db.update(
-                "items",
-                values,
-                selection,
-                selectionArgs);
+
 
         db.close();
     }
@@ -95,6 +92,29 @@ public class ItemDB extends SQLiteOpenHelper {
     public void close() {
         SQLiteDatabase db = getWritableDatabase();
         db.close();
+    }
+
+    // search item by title
+    public List<Item> search(String title) {
+        // find item
+        List<Item> items = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM items WHERE title LIKE ?", new String[]{"%" + title + "%"});
+        // map data to item
+        while (cursor.moveToNext()) {
+            String title1 = cursor.getString(cursor.getColumnIndexOrThrow("title"));
+            String content = cursor.getString(cursor.getColumnIndexOrThrow("content"));
+            int price = cursor.getInt(cursor.getColumnIndexOrThrow("price"));
+            int image = cursor.getInt(cursor.getColumnIndexOrThrow("image"));
+            int id = cursor.getInt(cursor.getColumnIndexOrThrow("id"));
+            Item item = new Item(id,title1, content, price, image);
+            items.add(item);
+        }
+        cursor.close();
+        db.close();
+        return items;
+
     }
 
 
@@ -118,6 +138,24 @@ public class ItemDB extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return items;
+    }
+    public Item getItem(int id) {
+        // find item
+        Item item = null;
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM items WHERE id = ?", new String[]{String.valueOf(id)});
+        // map data to item
+        while (cursor.moveToNext()) {
+            String title = cursor.getString(cursor.getColumnIndexOrThrow("title"));
+            String content = cursor.getString(cursor.getColumnIndexOrThrow("content"));
+            int price = cursor.getInt(cursor.getColumnIndexOrThrow("price"));
+            int image = cursor.getInt(cursor.getColumnIndexOrThrow("image"));
+            item = new Item(id,title, content, price, image);
+        }
+        cursor.close();
+        db.close();
+        return item;
     }
 
 }

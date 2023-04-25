@@ -7,11 +7,9 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 
 import com.example.nguyenapp.R;
 import com.example.nguyenapp.database.ItemDB;
@@ -20,29 +18,21 @@ import com.example.nguyenapp.model.Item;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RVItemAdapter extends RecyclerView.Adapter<RVItemAdapter.MyViewHolder> {
+public class RVSearchItemAdapter extends RecyclerView.Adapter<RVSearchItemAdapter.MyViewHolder> {
 
     private Context context;
     private List<Item> items = new ArrayList<>();
-    private ItemDB itemDB;
 
 
     // A listener for the item in the RecyclerView.
     public interface ItemListener {
-        void onClickItem(View view, Item item );
+        void onClickItem(View view, int position);
     }
-
-    public interface ItemDeleteListener {
-        void onClickItemDelete(View view, Item item);
-    }
-    private ItemDeleteListener itemDeleteListener;
-
     private ItemListener itemListener;
 
 
-    public RVItemAdapter(Context context) {
+    public RVSearchItemAdapter(Context context) {
         this.context = context;
-        itemDB = new ItemDB(context);
     }
 
 
@@ -80,7 +70,7 @@ public class RVItemAdapter extends RecyclerView.Adapter<RVItemAdapter.MyViewHold
             System.out.println(itemListener);
 
             // Call the onClickItem method of the ItemListener interface
-            itemListener.onClickItem(view, items.get(getAdapterPosition()));
+            itemListener.onClickItem(view, getAdapterPosition());
         }
     }
 
@@ -91,7 +81,7 @@ public class RVItemAdapter extends RecyclerView.Adapter<RVItemAdapter.MyViewHold
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // TODO: Inflate the layout for the item
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_item, parent, false);
         return new MyViewHolder(itemView);
     }
 
@@ -106,21 +96,6 @@ public class RVItemAdapter extends RecyclerView.Adapter<RVItemAdapter.MyViewHold
         holder.ivImage.setImageResource(item.getImage());
         holder.tvPrice.setText(String.valueOf(item.getPrice()));
 
-        // Set the listener for the delete button
-        holder.ibDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                items.remove(holder.getAdapterPosition());
-                int res = itemDB.remove(item);
-//                System.out.println("Delete "+res+" Item Success");
-//                Toast.makeText(context, "Delete "+res+" Item Success", Toast.LENGTH_LONG).show();
-//                notifyDataSetChanged();
-                if (itemDeleteListener == null) return;
-                itemDeleteListener.onClickItemDelete(v, item);
-            }
-
-        });
-
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -134,9 +109,6 @@ public class RVItemAdapter extends RecyclerView.Adapter<RVItemAdapter.MyViewHold
         this.itemListener = itemListener;
     }
 
-    public void setItemDeleteListener(ItemDeleteListener itemDeleteListener) {
-        this.itemDeleteListener = itemDeleteListener;
-    }
 
     public List<Item> getItems() {
         return items;

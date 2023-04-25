@@ -39,6 +39,7 @@ public class AddActivity extends AppCompatActivity {
     // ItemDB
     private ItemDB itemDB;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,10 +49,21 @@ public class AddActivity extends AppCompatActivity {
         // init db
         itemDB = new ItemDB(this);
 
+
         // init view
         initView();
         makeImageSpiner();
         handleEvent();
+        String type = getIntent().getStringExtra("type");
+        System.out.println("type: " + type);
+        if (type.equals("edit")) {
+            currentSelectItem = itemDB.getItem(getIntent().getIntExtra("id", 0));
+            System.out.println("currentSelectItem: " + currentSelectItem);
+            etTitle.setText(currentSelectItem.getTitle());
+            etContent.setText(currentSelectItem.getContent());
+            etPrice.setText(currentSelectItem.getPrice() + "");
+            btnAdd.setText("Update");
+        }
     }
 
     // TODO: map các biến với các view trong layout
@@ -87,7 +99,14 @@ public class AddActivity extends AppCompatActivity {
         int image = listItemImage.get(spinnerImage.getSelectedItemPosition()).getImage();
         Item item = new Item(title, content, image);
         item.setPrice(price);
-        itemDB.add(item);
+
+        if(btnAdd.getText().equals("Update")){
+            item.setId(currentSelectItem.getId());
+            itemDB.update(item);
+        } else {
+            itemDB.add(item);
+        }
+//        itemDB.add(item);
 
 
         itemDB.getItems().forEach(item1 -> {
@@ -104,6 +123,11 @@ public class AddActivity extends AppCompatActivity {
             Database.addItem(item);
         }
         updateButtonText();
+        Toast.makeText(this, "Add success", Toast.LENGTH_SHORT).show();
+        // Set success result
+        setResult(RESULT_OK);
+        finish();
+
     }
 
     private void handleEvent() {
@@ -120,23 +144,23 @@ public class AddActivity extends AppCompatActivity {
 
 
 
-//    private void setEditForm(Item item) {
-//        System.out.println("item: " + item);
-//        etTitle.setText(item.getTitle());
-//        etContent.setText(item.getContent());
-//        etPrice.setText(String.valueOf(item.getPrice()));
-//        System.out.println("SpinerImageAdapter: " + item.getImage() + "");
-////        sImage.setSelection();
-//        // find image int and set selecion
-//        for (int i = 0; i < listItemImage.size(); i++) {
-//            if (listItemImage.get(i).getImage() == item.getImage()) {
-//                spinnerImage.setSelection(i);
-//            }
-//        }
-//        currentSelectItem = item;
-//        updateButtonText();
-//
-//    }
+    private void setEditForm(Item item) {
+        System.out.println("item: " + item);
+        etTitle.setText(item.getTitle());
+        etContent.setText(item.getContent());
+        etPrice.setText(String.valueOf(item.getPrice()));
+        System.out.println("SpinerImageAdapter: " + item.getImage() + "");
+//        sImage.setSelection();
+        // find image int and set selecion
+        for (int i = 0; i < listItemImage.size(); i++) {
+            if (listItemImage.get(i).getImage() == item.getImage()) {
+                spinnerImage.setSelection(i);
+            }
+        }
+        currentSelectItem = item;
+        updateButtonText();
+
+    }
 
     private boolean validateForm() {
         if (etTitle.getText().toString().isEmpty()) {

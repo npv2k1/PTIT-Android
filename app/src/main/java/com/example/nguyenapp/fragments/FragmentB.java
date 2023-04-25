@@ -1,6 +1,8 @@
 package com.example.nguyenapp.fragments;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,14 +19,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nguyenapp.R;
 import com.example.nguyenapp.adapter.RVItemAdapter;
+import com.example.nguyenapp.adapter.RVSearchItemAdapter;
 import com.example.nguyenapp.database.Database;
+import com.example.nguyenapp.database.ItemDB;
 import com.example.nguyenapp.model.Item;
 
 import java.util.List;
 
 public class FragmentB extends Fragment {
+    private ItemDB itemDB;
     private RecyclerView rvItem;
-    private RVItemAdapter itemAdapter;
+    private RVSearchItemAdapter itemAdapter;
 
     private EditText etSearch;
     private ImageButton btnSearch;
@@ -32,7 +37,6 @@ public class FragmentB extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         View v = inflater.inflate(R.layout.fragment_b, container, false);
         return v;
     }
@@ -43,13 +47,14 @@ public class FragmentB extends Fragment {
 
         super.onViewCreated(view, savedInstanceState);
 
-        super.onViewCreated(view, savedInstanceState);
+        itemDB = new ItemDB(getContext());
 
         rvItem = view.findViewById(R.id.rvItem);
+        etSearch = view.findViewById(R.id.etSearch);
 
 
-        itemAdapter = new RVItemAdapter(getContext());
-        itemAdapter.setItemListener(new RVItemAdapter.ItemListener() {
+        itemAdapter = new RVSearchItemAdapter(getContext());
+        itemAdapter.setItemListener(new RVSearchItemAdapter.ItemListener() {
             @Override
             public void onClickItem(View view, int position) {
                 System.out.println("position: " + position);
@@ -57,7 +62,7 @@ public class FragmentB extends Fragment {
             }
         });
 
-        createAdapter(itemAdapter, Database.getItems());
+        createAdapter(itemAdapter, itemDB.getItems());
 
 
         btnSearch = view.findViewById(R.id.btnSearch);
@@ -65,19 +70,41 @@ public class FragmentB extends Fragment {
             @Override
             public void onClick(View v) {
                 if (etSearch.getText().toString().isEmpty()) {
-                    createAdapter(itemAdapter, Database.getItems());
+                    createAdapter(itemAdapter, itemDB.getItems());
                     return;
                 }
                 String search = etSearch.getText().toString();
-                List<Item> items = Database.search(search);
+                List<Item> items = (List<Item>) itemDB.search(search);
                 createAdapter(itemAdapter, items);
+            }
+        });
+
+        // search on text change
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (etSearch.getText().toString().isEmpty()) {
+                    createAdapter(itemAdapter, itemDB.getItems());
+                    return;
+                }
+                String search = etSearch.getText().toString();
+                List<Item> items = (List<Item>) itemDB.search(search);
+                createAdapter(itemAdapter, items);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
             }
         });
 
 
     }
 
-    private void createAdapter(RVItemAdapter adapter, List<Item> items) {
+    private void createAdapter(RVSearchItemAdapter adapter, List<Item> items) {
         adapter.setItems(items);
         rvItem.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         rvItem.setAdapter(adapter);

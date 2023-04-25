@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -27,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
 
     FloatingActionButton fab;
+
+    AdapterViewpager adapterViewpager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,12 +44,15 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         fab = findViewById(R.id.fab);
 
-        AdapterViewpager adapterViewpager = new AdapterViewpager(getSupportFragmentManager(), 3);
+        adapterViewpager = new AdapterViewpager(getSupportFragmentManager(), 3, this    );
         viewPager.setAdapter(adapterViewpager);
+
 
         viewPager.setPageTransformer(true, new Animation());
 
         viewPager.setAdapter(adapterViewpager);
+
+
 
         tabLayout.setupWithViewPager(viewPager);
 
@@ -100,12 +106,34 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // show add activity
                 Intent intent = new Intent(MainActivity.this, AddActivity.class);
-                startActivity(intent);
+                // send data
+                intent.putExtra("type", "add");
+
+                startActivityForResult(intent, 1 );
 
 
             }
 
         });
+    }
+
+    // activity result
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        System.out.println("data: >>>>>>>>>>" + data);
+        viewPager.setAdapter(adapterViewpager);
+//        // Check the request code and result code.
+//        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+//            // Do something with the data that was returned from the second activity.
+//            System.out.println("data: " + "done add");
+//            Toast.makeText(this, "done add", Toast.LENGTH_SHORT).show();
+////            adapterViewpager.notifyDataSetChanged();
+//
+//            viewPager.setAdapter(adapterViewpager);
+//        }
     }
 
     @Override
