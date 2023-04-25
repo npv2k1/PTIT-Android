@@ -45,13 +45,17 @@ public class MainActivity extends AppCompatActivity {
         fab = findViewById(R.id.fab);
 
         adapterViewpager = new AdapterViewpager(getSupportFragmentManager(), 3, this    );
+        adapterViewpager.setOnReload(new AdapterViewpager.onReload() {
+            @Override
+            public void reload() {
+                viewPager.setAdapter(adapterViewpager);
+            }
+        });
         viewPager.setAdapter(adapterViewpager);
-
 
         viewPager.setPageTransformer(true, new Animation());
 
         viewPager.setAdapter(adapterViewpager);
-
 
 
         tabLayout.setupWithViewPager(viewPager);

@@ -21,12 +21,23 @@ public class AdapterViewpager extends FragmentPagerAdapter {
         this.context = context;
     }
 
+    public interface onReload{
+        void reload();
+    }
+    onReload onReload;
+
+
+    public void setOnReload(AdapterViewpager.onReload onReload) {
+        this.onReload = onReload;
+    }
+
     @NonNull
     @Override
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new FragmentA(context);
+
+                return new FragmentA(context, onReload);
             case 1:
                 return new FragmentB();
             case 2:
