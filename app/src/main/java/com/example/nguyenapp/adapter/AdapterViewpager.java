@@ -42,13 +42,13 @@ public class AdapterViewpager extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0:
-                return "Food";
+                return "Home";
             case 1:
-                return "Movie";
+                return "Search";
             case 2:
-                return "Travel";
+                return "Info";
             default:
-                return "Food";
+                return "Home";
         }
     }
 }

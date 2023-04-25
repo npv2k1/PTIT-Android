@@ -29,24 +29,7 @@ public class FragmentC extends Fragment {
 
 
         super.onViewCreated(view, savedInstanceState);
-        EditText etName;
-        Button btnClick;
-        TextView tvName;
 
-        etName = view.findViewById(R.id.etName);
-        btnClick = view.findViewById(R.id.btnClick);
-        tvName = view.findViewById(R.id.tvName);
-
-        btnClick.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String name = etName.getText().toString();
-                if(!name.isEmpty()){
-                    tvName.setText("Hello "+name);
-                }
-
-            }
-        });
 
     }
 }

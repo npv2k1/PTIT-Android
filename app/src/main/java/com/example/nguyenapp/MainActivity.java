@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,11 +12,14 @@ import android.widget.Toast;
 
 import com.example.nguyenapp.adapter.AdapterViewpager;
 import com.example.nguyenapp.animation.Animation;
+import com.example.nguyenapp.database.ItemDB;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 public class MainActivity extends AppCompatActivity {
+
+    private ItemDB itemDB;
 
     ViewPager viewPager;
     TabLayout tabLayout;
@@ -25,9 +29,12 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionButton fab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // hide action bar
+        getSupportActionBar().hide();
+
+        itemDB = new ItemDB(this);
 
         viewPager = findViewById(R.id.viewPager);
         tabLayout = findViewById(R.id.tabLayout);
@@ -42,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(adapterViewpager);
 
         tabLayout.setupWithViewPager(viewPager);
-        tabLayout.getTabAt(0).setIcon(R.drawable.ic_baseline_home_24);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -92,8 +98,13 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "ADD", Toast.LENGTH_SHORT).show();
+                // show add activity
+                Intent intent = new Intent(MainActivity.this, AddActivity.class);
+                startActivity(intent);
+
+
             }
+
         });
     }
 
