@@ -26,7 +26,7 @@ public class RVSearchItemAdapter extends RecyclerView.Adapter<RVSearchItemAdapte
 
     // A listener for the item in the RecyclerView.
     public interface ItemListener {
-        void onClickItem(View view, int position);
+        void onClickItem(View view, Item item);
     }
     private ItemListener itemListener;
 
@@ -66,11 +66,7 @@ public class RVSearchItemAdapter extends RecyclerView.Adapter<RVSearchItemAdapte
         @Override
         public void onClick(View view) {
             if (itemListener == null) return;
-            System.out.println("Click item");
-            System.out.println(itemListener);
-
-            // Call the onClickItem method of the ItemListener interface
-            itemListener.onClickItem(view, getAdapterPosition());
+            itemListener.onClickItem(view, items.get(getAdapterPosition()));
         }
     }
 

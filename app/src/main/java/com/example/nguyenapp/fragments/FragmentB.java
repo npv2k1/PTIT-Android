@@ -1,5 +1,7 @@
 package com.example.nguyenapp.fragments;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -17,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.nguyenapp.AddActivity;
 import com.example.nguyenapp.R;
 import com.example.nguyenapp.adapter.RVItemAdapter;
 import com.example.nguyenapp.adapter.RVSearchItemAdapter;
@@ -27,12 +30,23 @@ import com.example.nguyenapp.model.Item;
 import java.util.List;
 
 public class FragmentB extends Fragment {
+
+    private Context context;
+
     private ItemDB itemDB;
     private RecyclerView rvItem;
     private RVSearchItemAdapter itemAdapter;
 
     private EditText etSearch;
     private ImageButton btnSearch;
+
+    public FragmentB() {
+    }
+
+    public FragmentB(Context context) {
+        this.context = context;
+    }
+
 
     @Nullable
     @Override
@@ -43,8 +57,6 @@ public class FragmentB extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
-
         super.onViewCreated(view, savedInstanceState);
 
         itemDB = new ItemDB(getContext());
@@ -56,9 +68,11 @@ public class FragmentB extends Fragment {
         itemAdapter = new RVSearchItemAdapter(getContext());
         itemAdapter.setItemListener(new RVSearchItemAdapter.ItemListener() {
             @Override
-            public void onClickItem(View view, int position) {
-                System.out.println("position: " + position);
-//                setEditForm(DB.getItems().get(position));
+            public void onClickItem(View view, Item item) {
+                Intent intent = new Intent(context, AddActivity.class);
+                intent.putExtra("type", "edit");
+                intent.putExtra("id", item.getId());
+                startActivityForResult(intent, 1);
             }
         });
 

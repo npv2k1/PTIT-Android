@@ -39,7 +39,7 @@ public class AdapterViewpager extends FragmentPagerAdapter {
 
                 return new FragmentA(context, onReload);
             case 1:
-                return new FragmentB();
+                return new FragmentB(context);
             case 2:
                 return new FragmentC();
             default:

@@ -38,7 +38,7 @@ public class FragmentA extends Fragment {
     private RecyclerView rvItem;
     private RVItemAdapter itemAdapter;
     private ImageButton btnReload;
-    private  AdapterViewpager.onReload onReload;
+    private AdapterViewpager.onReload onReload;
 
     public FragmentA() {
     }
@@ -46,13 +46,8 @@ public class FragmentA extends Fragment {
     public FragmentA(Context context, AdapterViewpager.onReload onReload) {
         this.context = context;
         this.onReload = onReload;
-
     }
 
-    // reload
-    public void reload() {
-        itemAdapter.notifyDataSetChanged();
-    }
 
     @Nullable
     @Override
@@ -73,14 +68,11 @@ public class FragmentA extends Fragment {
         itemAdapter.setItemListener(new RVItemAdapter.ItemListener() {
             @Override
             public void onClickItem(View view, Item item) {
-//                System.out.println("position: " + position);
-                // open intent
-
+                // open form intent for edit
                 Intent intent = new Intent(context, AddActivity.class);
                 // send data
                 intent.putExtra("type", "edit");
                 intent.putExtra("id", item.getId());
-
                 startActivityForResult(intent, 1);
 
             }
@@ -89,7 +81,6 @@ public class FragmentA extends Fragment {
             @Override
             public void onClickItemDelete(View view, Item item) {
                 itemDB.remove(item);
-//                createAdapter(itemAdapter, itemDB.getItems());
                 onReload.reload();
             }
         });
@@ -103,8 +94,6 @@ public class FragmentA extends Fragment {
                 createAdapter(itemAdapter, itemDB.getItems());
             }
         });
-
-
     }
 
     private void createAdapter(RVItemAdapter adapter, List<Item> items) {
