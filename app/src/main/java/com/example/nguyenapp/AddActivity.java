@@ -115,13 +115,13 @@ public class AddActivity extends AppCompatActivity {
 
 
 
-        if(currentSelectItem != null) {
-            item.setId(currentSelectItem.getId());
-            boolean updateStatus =  Database.updateItem(item);
-            currentSelectItem = null;
-        } else {
-            Database.addItem(item);
-        }
+//        if(currentSelectItem != null) {
+//            item.setId(currentSelectItem.getId());
+//            boolean updateStatus =  Database.updateItem(item);
+//            currentSelectItem = null;
+//        } else {
+//            Database.addItem(item);
+//        }
         updateButtonText();
         Toast.makeText(this, "Add success", Toast.LENGTH_SHORT).show();
         // Set success result
